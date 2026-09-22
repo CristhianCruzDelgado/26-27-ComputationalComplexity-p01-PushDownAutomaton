@@ -71,8 +71,9 @@ void PushDownAutomatonApp::parseTraceArgs() {
 }
 
 void PushDownAutomatonApp::runPushDownAutomaton() {
-  // file_ >> pushdown_automaton_;
-  // pushdown_automaton_.run();
+  file_ >> pushdown_automaton_;
+  pushdown_automaton_.run(trace_);
+  std::cout << pushdown_automaton_;
 }
 
 const std::string PushDownAutomatonApp::HELP_MESSAGE_ = 

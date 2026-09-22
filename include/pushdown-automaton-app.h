@@ -21,7 +21,6 @@ class PushDownAutomatonApp {
  public:
   PushDownAutomatonApp(int argc, char* argv[]);
   void parseArgsAndRunPushDownAutomaton();
-
  private:
   void parseArgs();
   void parseAuxiliaryArgs();
@@ -29,13 +28,11 @@ class PushDownAutomatonApp {
   void parseConfigArgs();
   void parseTraceArgs();
   void runPushDownAutomaton();
-
   int argc_;
   std::vector<std::string> argv_;
   std::ifstream file_;
   bool trace_;
   PushDownAutomaton pushdown_automaton_;
-
   static const std::string HELP_MESSAGE_;
 };
 
