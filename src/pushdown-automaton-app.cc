@@ -10,14 +10,18 @@
 #include "../include/pushdown-automaton-app.h"
 
 PushDownAutomatonApp::PushDownAutomatonApp(int argc, char* argv[]) : 
-  argc_(argc), file_(nullptr), trace_(false), pushdown_automaton_() {
+    argc_(argc), 
+    file_(nullptr), 
+    trace_(false), 
+    pushdown_automaton_() {
   for (int i = 0; i < argc; ++i) {
     argv_.push_back(std::string(argv[i]));
   }
 }
 
 void PushDownAutomatonApp::parseArgsAndRunPushDownAutomaton() {
-  parseArgs(); 
+  parseArgs();
+  readPushDownAutomaton();
   runPushDownAutomaton();
 }
 
@@ -70,15 +74,34 @@ void PushDownAutomatonApp::parseTraceArgs() {
   }
 }
 
-void PushDownAutomatonApp::runPushDownAutomaton() {
+void PushDownAutomatonApp::readPushDownAutomaton() {
   file_ >> pushdown_automaton_;
-  pushdown_automaton_.run(trace_);
   std::cout << pushdown_automaton_;
 }
 
+void PushDownAutomatonApp::runPushDownAutomaton() {
+  String input_string;
+  readInputString(input_string);
+  String exit_string = String("exit");
+  while (!(input_string == exit_string)) {
+    pushdown_automaton_.test(input_string, trace_);
+    readInputString(input_string);
+  }
+}
+
+void PushDownAutomatonApp::readInputString(String& input_string) {
+  std::cout << "Enter the input string to see if it is accepted or rejected by "
+      << "the pushdown\nautomaton (to test the empty string, use '.'), (to exit"
+      << " the app, enter 'exit' as\nthe input string): ";
+  if (!(std::cin >> input_string)) {
+    throw std::invalid_argument("Invalid input: no input string defined");
+  }
+  std::cout << "\n";
+}
+
 const std::string PushDownAutomatonApp::HELP_MESSAGE_ = 
-  "Help: This program simulates a pushdown automaton (PDA)\
-  \nTry:  ./pushdown-automaton\
-  \n      [-h|--help]                                        ~ Help\
-  \n      [-config ../data/APv-[1|2|3].txt -trace [y|n]]     ~ Run\
-  \n";
+    "Help: This program simulates a pushdown automaton (PDA)\
+    \nTry:  ./pushdown-automaton\
+    \n      -h|-help                                           ~ Help\
+    \n      -config <../data/APv-[1|2|3].txt> -trace <y|n>     ~ Run\
+    \n";

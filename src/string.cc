@@ -61,6 +61,24 @@ int String::length() const {
   return string_.size(); 
 }
 
+bool String::empty() const {
+  return length() == 0;
+}
+
+void String::popFront() {
+  if (!empty()) {
+    string_.erase(string_.begin());
+  }
+}
+
+void String::pushBack(const Symbol& symbol) {
+  string_.push_back(symbol);
+}
+
+void String::popBack() {
+  string_.pop_back();
+}
+
 void String::read(std::istream& is) {
   std::string string;
   if (!std::getline(is, string)) {

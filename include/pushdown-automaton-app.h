@@ -7,8 +7,8 @@
  * Email: alu0101648293@ull.edu.es
  */
 
-#ifndef PUSHDOWN_AUTOMATON_APP_H
-#define PUSHDOWN_AUTOMATON_APP_H
+#ifndef PUSHDOWN_AUTOMATON_APP_H_
+#define PUSHDOWN_AUTOMATON_APP_H_
 
 #include "pushdown-automaton.h"
 
@@ -27,7 +27,9 @@ class PushDownAutomatonApp {
   void parseAppArgs();
   void parseConfigArgs();
   void parseTraceArgs();
+  void readPushDownAutomaton();
   void runPushDownAutomaton();
+  void readInputString(String&);
   int argc_;
   std::vector<std::string> argv_;
   std::ifstream file_;

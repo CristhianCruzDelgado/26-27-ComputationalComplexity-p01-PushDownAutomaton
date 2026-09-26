@@ -45,7 +45,7 @@ const std::set<Symbol>& Alphabet::getAlphabet() const {
   return alphabet_; 
 }
 
-bool Alphabet::includes(Symbol& symbol) {
+bool Alphabet::includes(const Symbol& symbol) const {
   return alphabet_.find(symbol) != alphabet_.end();
 }
 

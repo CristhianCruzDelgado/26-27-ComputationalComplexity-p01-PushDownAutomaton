@@ -25,7 +25,7 @@ class Alphabet {
   friend std::istream& operator>>(std::istream&, Alphabet&);
   friend std::ostream& operator<<(std::ostream&, const Alphabet&);
   const std::set<Symbol>& getAlphabet() const;
-  bool includes(Symbol&);
+  bool includes(const Symbol&) const;
  private:
   std::set<Symbol> alphabet_;
   void read(std::istream&);

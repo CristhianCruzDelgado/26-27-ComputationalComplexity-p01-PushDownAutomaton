@@ -30,6 +30,10 @@ class String {
   friend std::ostream& operator<<(std::ostream&, const String&);
   const std::vector<Symbol>& getString() const;
   int length() const;
+  bool empty() const;
+  void popFront();
+  void pushBack(const Symbol&);
+  void popBack();
  private:
   std::vector<Symbol> string_;
   void read(std::istream&);
