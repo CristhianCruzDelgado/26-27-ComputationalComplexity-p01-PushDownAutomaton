@@ -21,11 +21,12 @@ class Alphabet {
  public:
   Alphabet() = default;
   Alphabet(const std::string&);
-  Alphabet& operator=(const Alphabet&);
+  const std::set<Symbol>& getAlphabet() const;
+  std::size_t size() const;
+  bool empty() const;
+  bool includes(const Symbol&) const;
   friend std::istream& operator>>(std::istream&, Alphabet&);
   friend std::ostream& operator<<(std::ostream&, const Alphabet&);
-  const std::set<Symbol>& getAlphabet() const;
-  bool includes(const Symbol&) const;
  private:
   std::set<Symbol> alphabet_;
   void read(std::istream&);

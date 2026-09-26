@@ -10,37 +10,53 @@
 #include "../include/string.h"
 
 String::String(const std::string& string) {
-  if (string.size() > 1 || string[0] != Symbol::EMPTY_SYMBOL) {
-    for (char symbol : string) {
-      if (symbol == Symbol::EMPTY_SYMBOL) {
-        throw std::runtime_error("String cannot contain empty symbol");
-      }
-      string_.push_back(Symbol(symbol));
+  if (string.empty()) {
+    return;
+  }
+  if (string.size() == 1 && string[0] == Symbol::EMPTY_SYMBOL) {
+    return;
+  }
+  for (char character : string) {
+    if (character == Symbol::EMPTY_SYMBOL) {
+      throw std::invalid_argument("String cannot contain the empty symbol");
     }
+    Symbol symbol(character);
+    string_.push_back(symbol);
   }
 }
 
-String& String::operator=(const String& other) {
-  if (this != &other) {
-    string_ = other.getString();
-  }
-  return *this;
-}
-
-Symbol& String::operator[](int index) { 
+Symbol& String::operator[](std::size_t index) { 
   return string_[index]; 
 }
 
-const Symbol& String::operator[](int index) const { 
+const Symbol& String::operator[](std::size_t index) const { 
   return string_[index]; 
-}
-
-bool String::operator<(const String& string) const { 
-  return this->length() < string.length();
 }
 
 bool String::operator==(const String& string) const { 
   return string_ == string.getString();
+}
+
+bool String::operator<(const String& string) const { 
+  return size() < string.size();
+}
+
+const std::vector<Symbol>& String::getString() const { 
+  return string_; 
+}
+
+std::size_t String::size() const { 
+  return string_.size(); 
+}
+
+bool String::empty() const {
+  return string_.empty();
+}
+
+void String::popFront() {
+  if (!empty()) {
+    string_.erase(string_.begin());
+  }
 }
 
 std::istream& operator>>(std::istream& is, String& string) {
@@ -53,38 +69,13 @@ std::ostream& operator<<(std::ostream& os, const String& string) {
   return os;
 }
 
-const std::vector<Symbol>& String::getString() const { 
-  return string_; 
-}
-
-int String::length() const { 
-  return string_.size(); 
-}
-
-bool String::empty() const {
-  return length() == 0;
-}
-
-void String::popFront() {
-  if (!empty()) {
-    string_.erase(string_.begin());
-  }
-}
-
-void String::pushBack(const Symbol& symbol) {
-  string_.push_back(symbol);
-}
-
-void String::popBack() {
-  string_.pop_back();
-}
-
 void String::read(std::istream& is) {
   std::string string;
   if (!std::getline(is, string)) {
     throw std::invalid_argument("Invalid input: string undefined");
   }
-  string_ = String(string).getString();
+  String tmp(string);
+  *this = std::move(tmp);
 }
 
 void String::write(std::ostream& os) const {

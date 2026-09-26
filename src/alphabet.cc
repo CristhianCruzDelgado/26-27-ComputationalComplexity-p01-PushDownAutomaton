@@ -9,26 +9,36 @@
 
 #include "../include/alphabet.h"
 
-Alphabet::Alphabet(const std::string& alphabet) {
-  for (char symbol : alphabet) {
-    if (symbol == Symbol::EMPTY_SYMBOL) {
+Alphabet::Alphabet(const std::string& alphabet_string) {
+  for (char character : alphabet_string) {
+    if (character == Symbol::EMPTY_SYMBOL) {
       throw std::invalid_argument("Alphabet cannot include empty symbol");
     }
-    if (symbol == ' ') {
+    if (character == ' ') {
       continue;
     }
-    alphabet_.insert(Symbol(symbol));
+    Symbol symbol(character);
+    alphabet_.insert(symbol);
   }
   if (alphabet_.empty()) {
     throw std::invalid_argument("Alphabet cannot be empty");
   } 
 }
 
-Alphabet& Alphabet::operator=(const Alphabet& other) {
-  if (this != &other) {
-    alphabet_ = other.getAlphabet();
-  }
-  return *this;
+const std::set<Symbol>& Alphabet::getAlphabet() const { 
+  return alphabet_; 
+}
+
+std::size_t Alphabet::size() const {
+  return alphabet_.size();
+}
+
+bool Alphabet::empty() const {
+  return alphabet_.empty();
+}
+
+bool Alphabet::includes(const Symbol& symbol) const {
+  return alphabet_.find(symbol) != alphabet_.end();
 }
 
 std::istream& operator>>(std::istream& is, Alphabet& alphabet) {
@@ -41,26 +51,24 @@ std::ostream& operator<<(std::ostream& os, const Alphabet& alphabet) {
   return os;
 }
 
-const std::set<Symbol>& Alphabet::getAlphabet() const { 
-  return alphabet_; 
-}
-
-bool Alphabet::includes(const Symbol& symbol) const {
-  return alphabet_.find(symbol) != alphabet_.end();
-}
-
 void Alphabet::read(std::istream& is) {
-  std::string alphabet;
-  if (!std::getline(is, alphabet)) {
+  std::string alphabet_string;
+  if (!std::getline(is, alphabet_string)) {
     throw std::invalid_argument("Invalid input: alphabet undefined");
   }
-  alphabet_ = Alphabet(alphabet).getAlphabet(); 
+  Alphabet tmp(alphabet_string);
+  *this = std::move(tmp);
 }
 
 void Alphabet::write(std::ostream& os) const {
   os << "{";
-  for (auto i = alphabet_.begin(); i != alphabet_.end(); ++i) {
-    os << *i << (std::next(i) != alphabet_.end() ? ", " : ""); 
+  bool first = true;
+  for (const Symbol& symbol : alphabet_) {
+    if (!first) {
+      os << ", ";
+    }
+    os << symbol;
+    first = false;
   }
   os << "}";
 }

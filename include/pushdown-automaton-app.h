@@ -11,6 +11,7 @@
 #define PUSHDOWN_AUTOMATON_APP_H_
 
 #include "pushdown-automaton.h"
+#include "pushdown-automaton-simulator.h"
 
 #include <iostream>
 #include <fstream>
@@ -25,17 +26,16 @@ class PushDownAutomatonApp {
   void parseArgs();
   void parseAuxiliaryArgs();
   void parseAppArgs();
-  void parseConfigArgs();
-  void parseTraceArgs();
   void readPushDownAutomaton();
   void runPushDownAutomaton();
   void readInputString(String&);
   int argc_;
   std::vector<std::string> argv_;
-  std::ifstream file_;
+  std::string config_path_;
   bool trace_;
   PushDownAutomaton pushdown_automaton_;
-  static const std::string HELP_MESSAGE_;
+  PushDownAutomatonSimulator pushdown_automaton_simulator_;
+  static const char* HELP_MESSAGE_;
 };
 
 #endif

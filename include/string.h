@@ -21,19 +21,16 @@ class String {
  public:
   String() = default;
   String(const std::string&);
-  String& operator=(const String&);
-  Symbol& operator[](int);
-  const Symbol& operator[](int) const;
-  bool operator<(const String&) const;
+  Symbol& operator[](std::size_t);
+  const Symbol& operator[](std::size_t) const;
   bool operator==(const String&) const;
-  friend std::istream& operator>>(std::istream&, String&);
-  friend std::ostream& operator<<(std::ostream&, const String&);
+  bool operator<(const String&) const;
   const std::vector<Symbol>& getString() const;
-  int length() const;
+  std::size_t size() const;
   bool empty() const;
   void popFront();
-  void pushBack(const Symbol&);
-  void popBack();
+  friend std::istream& operator>>(std::istream&, String&);
+  friend std::ostream& operator<<(std::ostream&, const String&);
  private:
   std::vector<Symbol> string_;
   void read(std::istream&);

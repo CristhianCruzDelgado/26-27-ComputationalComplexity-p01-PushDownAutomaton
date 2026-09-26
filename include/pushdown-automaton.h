@@ -24,28 +24,34 @@
 #include <string>
 #include <vector>
 
-using StateTransition =
-  std::pair<std::pair<Symbol, Symbol>, std::pair<std::string, String>>;
-using StateTransitions = 
-  std::multimap<std::pair<Symbol, Symbol>, std::pair<std::string, String>>;
-using IndexOfStateTransition = std::pair<int, StateTransition>;
-using TransitionFunction = std::vector<StateTransitions>;
+struct Transition {
+  Symbol input_symbol;
+  Symbol stack_symbol;
+  std::string next_state;
+  String pushdown_string;
+};
 
 class PushDownAutomaton {
  public:
+  static const char* HORIZONTAL_LINE;
   PushDownAutomaton() = default;
+  const Alphabet& getInputAlphabet() const;
+  const Alphabet& getStackAlphabet() const;
+  const std::vector<std::string>& getStates() const;
+  const std::string& getInitialState() const;
+  const Symbol& getInitialStackSymbol() const;
+  std::vector<Transition> getTransitions(const std::string&,
+      const Symbol&, const Symbol&) const;
   friend std::istream& operator>>(std::istream&, PushDownAutomaton&);
   friend std::ostream& operator<<(std::ostream&, const PushDownAutomaton&);
-  void test(const String&, bool) const;
  private:
-  Alphabet input_alphabet_;
+  Alphabet input_alphabet_; 
   Alphabet stack_alphabet_;
   std::vector<std::string> states_;
   std::string initial_state_;
   Symbol initial_stack_symbol_;
   std::vector<std::string> final_states_;
-  TransitionFunction transition_function_;
-  static const std::string& HORIZONTAL_LINE;
+  std::multimap<std::string, Transition> transition_function_;
   void read(std::istream&);
   void readLineComments(std::istream&);
   void readStates(std::istream&);
@@ -55,16 +61,6 @@ class PushDownAutomaton {
   void readInitialStackSymbol(std::istream&);
   void readTransitionFunction(std::istream&);
   void write(std::ostream&) const;
-  bool hasStringInputAlphabetSymbols(const String&) const;
-  bool isStringAcceptedByStackEmptyAlgorithm(const String&, bool) const;
-  bool moveTroughStates(const std::string&, const String&, 
-      const std::stack<Symbol>&, int, bool) const;
-  std::vector<IndexOfStateTransition> getAvailableTransitions(
-      const std::string&, const Symbol&, const Symbol&) const;
-  void writeTrace(int, const std::string&, const String&, 
-      const std::stack<Symbol>&, 
-      const std::vector<IndexOfStateTransition>&) const;
-  void writeStack(std::stack<Symbol>) const;
 };
 
 #endif
